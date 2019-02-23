@@ -1,7 +1,7 @@
-import urllib.request as request
+from flask import Flask, request, abort
+import urllib.request
 import json
 from datetime import date
-from flask import Flask, request, abort
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -57,7 +57,8 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "NBA排名":
-        message = NBARank()
+        # message = NBARank()
+        message = 'cool'
         line_bot_api.reply_message(event.reply_token, message)
 
 def NBARank():
@@ -69,13 +70,13 @@ def NBARank():
   team_data={}
   return_data='NBA今日戰績'
 
-  with request.urlopen(nbaTeamNameUrl) as response:
+  with urllib.request.urlopen(nbaTeamNameUrl) as response:
     data = json.load(response)
     data = data['league']['standard']
     for i in data:
       team_data[i['tricode']] = i['nickname']
 
-  with request.urlopen(url) as response:
+  with urllib.request.urlopen(url) as response:
       data = json.load(response)
       for i in data['games']:
         hTeam = team_data[i['hTeam']['triCode']]
