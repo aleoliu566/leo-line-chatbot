@@ -1,3 +1,6 @@
+import urllib.request as request
+import json
+from datetime import date
 from flask import Flask, request, abort
 
 from linebot import (
@@ -36,6 +39,7 @@ def handle_message(event):
     message = TextSendMessage(text=event.message.text)
     resume_url = "https://drive.google.com/file/d/1Q2ry3AevnYWmsRiO2i48203aDgdom5Ps/view?usp=sharing"
     resume_pic = "https://i.imgur.com/DQgSYuT.png"
+
     if event.message.text == "履歷":
         message = TemplateSendMessage(
             alt_text='Buttons template',
@@ -52,6 +56,34 @@ def handle_message(event):
             )
         )
         line_bot_api.reply_message(event.reply_token, message)
+    elif event.message.text == "NBA排名":
+        message = NBARank()
+        line_bot_api.reply_message(event.reply_token, message)
+
+def NBARank():
+  today = str(date.today().strftime("%Y%m%d"))
+
+  url = 'https://data.nba.net/prod/v2/'+today+'/scoreboard.json'
+  nbaTeamNameUrl = 'https://data.nba.net/prod/v1/2018/teams.json'
+
+  team_data={}
+  return_data='NBA今日戰績'
+
+  with request.urlopen(nbaTeamNameUrl) as response:
+    data = json.load(response)
+    data = data['league']['standard']
+    for i in data:
+      team_data[i['tricode']] = i['nickname']
+
+  with request.urlopen(url) as response:
+      data = json.load(response)
+      for i in data['games']:
+        hTeam = team_data[i['hTeam']['triCode']]
+        vTeam = team_data[i['vTeam']['triCode']]
+        hTeam_score = i['hTeam']['score'] if i['hTeam']['score'] != '' else '0'
+        vTeam_score = i['vTeam']['score'] if i['vTeam']['score'] != '' else '0'
+        return_data+= '\n'+ hTeam+' '+hTeam_score+' : '+vTeam_score+' '+vTeam
+  return return_data
 
 import os
 if __name__ == "__main__":
