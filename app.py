@@ -35,14 +35,14 @@ def callback():
 def handle_message(event):
     message = TextSendMessage(text=event.message.text)
     resume_url = "https://drive.google.com/file/d/1Q2ry3AevnYWmsRiO2i48203aDgdom5Ps/view?usp=sharing"
-    resume_pic = "https://drive.google.com/file/d/12OBGM0XrDvO--XH886xxLTmHsPvjvjOS/view?usp=sharing"
+    resume_pic = "https://i.imgur.com/DQgSYuT.png"
     if event.message.text == "履歷":
         message = TemplateSendMessage(
             alt_text='Buttons template',
             template=ButtonsTemplate(
                 thumbnail_image_url=resume_pic,
                 title='Resume',
-                text='點擊看更多',
+                text='點擊看履歷',
                 actions=[
                     URITemplateAction(
                         label='See more',
