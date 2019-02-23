@@ -34,7 +34,24 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token, message)
+    resume_url = "https://drive.google.com/file/d/1Q2ry3AevnYWmsRiO2i48203aDgdom5Ps/view?usp=sharing"
+    resume_pic = "https://drive.google.com/file/d/12OBGM0XrDvO--XH886xxLTmHsPvjvjOS/view?usp=sharing"
+    if event.message.text == "履歷":
+        message = TemplateSendMessage(
+            alt_text='Buttons template',
+            template=ButtonsTemplate(
+                thumbnail_image_url=resume_pic,
+                title='Resume',
+                text='點擊看更多',
+                actions=[
+                    URITemplateAction(
+                        label='See more',
+                        uri=resume_url
+                    )
+                ]
+            )
+        )
+        line_bot_api.reply_message(event.reply_token, message)
 
 import os
 if __name__ == "__main__":
