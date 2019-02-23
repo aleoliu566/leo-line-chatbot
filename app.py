@@ -57,8 +57,10 @@ def handle_message(event):
         )
         line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "NBA排名":
-        # message = NBARank()
-        message = 'cool'
+        message = TextMessage(text=NBARank())
+        line_bot_api.reply_message(event.reply_token, message)
+    else:
+        message = TextMessage(text='無此功能')
         line_bot_api.reply_message(event.reply_token, message)
 
 def NBARank():
