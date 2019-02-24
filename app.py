@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
 import urllib.request
 import json
+import random
 from datetime import date
 
 from linebot import (
@@ -39,29 +40,44 @@ def handle_message(event):
     message = TextSendMessage(text=event.message.text)
     resume_url = "https://drive.google.com/file/d/1Q2ry3AevnYWmsRiO2i48203aDgdom5Ps/view?usp=sharing"
     resume_pic = "https://i.imgur.com/DQgSYuT.png"
+    1A2B_game_status = False
+    1A2B_ans = ''
+    1A2B_count
 
     if event.message.text == "履歷":
-        message = TemplateSendMessage(
-            alt_text='Buttons template',
-            template=ButtonsTemplate(
-                thumbnail_image_url=resume_pic,
-                title='Resume',
-                text='點擊看履歷',
-                actions=[
-                    URITemplateAction(
-                        label='See more',
-                        uri=resume_url
-                    )
-                ]
+      message = TemplateSendMessage(
+        alt_text='Buttons template',
+        template=ButtonsTemplate(
+          thumbnail_image_url=resume_pic,
+          title='Resume',
+          text='點擊看履歷',
+          actions=[
+            URITemplateAction(
+              label='See more',
+              uri=resume_url
             )
+          ]
         )
-        line_bot_api.reply_message(event.reply_token, message)
+      )
+      line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "NBA排名":
-        message = TextMessage(text=NBARank())
-        line_bot_api.reply_message(event.reply_token, message)
+      message = TextMessage(text=NBARank())
+      line_bot_api.reply_message(event.reply_token, message)
+    elif event.message.text == "1A2B":
+      1A2B_game_status = True
+      digit = ('0123456789')
+      1A2B_ans = ''.join(random.sample(digit, 4))
+      1A2B_count = 0
+    elif event.message.text == "!1A2B":
+      1A2B_game_status = False
+    elif 1A2B_game_status:
+      1A2B_count+=1
+      1A2B_game_status, content= game1A2B(message, 1A2B_ans, 1A2B_count)
+      message = TextMessage(text=content)
+      line_bot_api.reply_message(event.reply_token, message)
     else:
-        message = TextMessage(text='無此功能')
-        line_bot_api.reply_message(event.reply_token, message)
+      message = TextMessage(text='無此功能')
+      line_bot_api.reply_message(event.reply_token, message)
 
 def NBARank():
   today = str(date.today().strftime("%Y%m%d"))
@@ -87,6 +103,21 @@ def NBARank():
         vTeam_score = i['vTeam']['score'] if i['vTeam']['score'] != '' else '0'
         return_data+= '\n'+ hTeam+' '+hTeam_score+' : '+vTeam_score+' '+vTeam
   return return_data
+
+def game1A2B(answer, reply, count):
+  a, b = 0, 0
+  if len(reply) != 4:
+    return True, '格式錯誤，請重新輸入'
+  else:
+    for i in range(4):
+      if reply[i] == answer[i]:
+        a += 1
+      elif reply[i] in answer:
+        b += 1
+    if a != 4:
+      return True, str(a)+'A'+str(b)+'B '+answer
+    elif reply == answer:
+      return False, '恭喜你答對了，總共回答'+str(count)+'次'
 
 import os
 if __name__ == "__main__":
