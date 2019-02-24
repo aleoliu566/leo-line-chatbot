@@ -63,7 +63,7 @@ def handle_message(event):
         )
       )
       line_bot_api.reply_message(event.reply_token, message)
-    elif event.message.text == "NBA排名":
+    elif event.message.text == "NBA戰績":
       message = TextMessage(text=NBARank())
       line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "1A2B":
@@ -71,6 +71,12 @@ def handle_message(event):
       digit = ('0123456789')
       game_1A2B_ans = ''.join(random.sample(digit, 4))
       game_1A2B_count = 0
+      content = "由電腦隨機生成不重複的四位數字，玩家猜，之後進行提示。\nA代表數字正確位置正確，B代表數字正確位置錯誤。如正確答案為9143，而猜的人猜9436，則是1A2B，其中有一個9的位置對了，記為1A，3和4這兩個數字對了，而位置錯誤，因此記為2B，合起來就是1A2B，接著猜的人再根據出題者的幾A幾B繼續猜，直到猜中（即4A0B）為止"
+      message = TextMessage(text=content)
+      line_bot_api.reply_message(event.reply_token, message)
+      content = "遊戲開始，請開始作答"
+      message = TextMessage(text=content)
+      line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "!1A2B":
       game_1A2Bstatus = False
     elif game_1A2B_status:
@@ -83,8 +89,8 @@ def handle_message(event):
       line_bot_api.reply_message(event.reply_token, message)
 
 def NBARank():
-  today = str(date.today().strftime("%Y%m%d"))
-
+  # 時差所以需要減一天
+  today = (datetime.datetime.now()-datetime.timedelta(hours=24)).strftime("%Y%m%d")
   url = 'https://data.nba.net/prod/v2/'+today+'/scoreboard.json'
   nbaTeamNameUrl = 'https://data.nba.net/prod/v1/2018/teams.json'
 
