@@ -134,7 +134,7 @@ def game1A2B(answer, reply, count):
       elif reply[i] in answer:
         b += 1
     if a != 4:
-      return True, str(a)+'A'+str(b)+'B '+answer
+      return True, str(a)+'A'+str(b)+'B'
     elif reply == answer:
       return False, '恭喜你答對了，總共回答'+str(count)+'次'
 
