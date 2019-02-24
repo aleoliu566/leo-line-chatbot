@@ -47,6 +47,7 @@ def handle_message(event):
     resume_pic = "https://i.imgur.com/DQgSYuT.png"
     global game_1A2B_status, game_1A2B_ans, game_1A2B_count
 
+    # 履歷
     if event.message.text == "履歷":
       message = TemplateSendMessage(
         alt_text='Buttons template',
@@ -63,24 +64,27 @@ def handle_message(event):
         )
       )
       line_bot_api.reply_message(event.reply_token, message)
+
+    # 今日NBA戰績
     elif event.message.text == "NBA戰績":
       message = TextMessage(text=NBARank())
       line_bot_api.reply_message(event.reply_token, message)
+
+    # 1A2B
     elif event.message.text == "1A2B":
       game_1A2B_status = True
       digit = ('0123456789')
       game_1A2B_ans = ''.join(random.sample(digit, 4))
       game_1A2B_count = 0
-      content = "遊戲開始，請作答"
+      content = "遊戲開始，請作答\n若要直接結束遊戲，請輸入「!1A2B」"
       message = TextMessage(text=content)
       line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "1A2B遊戲規則":
-      content = "由電腦隨機生成不重複的四位數字，玩家猜，之後進行提示。\nA代表數字正確位置正確，B代表數字正確位置錯誤。如正確答案為9143，而猜的人猜9436，則是1A2B，其中有一個9的位置對了，記為1A，3和4這兩個數字對了，而位置錯誤，因此記為2B，合起來就是1A2B，接著猜的人再根據出題者的幾A幾B繼續猜，直到猜中（即4A0B）為止"
+      content = "由電腦隨機生成不重複的四位數字，玩家猜，之後進行提示。\nA代表數字正確位置正確，B代表數字正確位置錯誤。如正確答案為9143，而猜的人猜9436，則是1A2B，其中有一個9的位置正確，記為1A，3和4這兩個數字正確，可是位置錯誤，因此記為2B，合起來就是1A2B，接著答題者再根據幾A幾B繼續回答，直到答對（即4A0B）為止"
       message = TextMessage(text=content)
       line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "!1A2B":
-      game_1A2Bstatus = False
-      print(game_1A2Bstatus)
+      game_1A2B_status = False
       message = TextMessage(text="結束1A2B")
       line_bot_api.reply_message(event.reply_token, message)
     elif game_1A2B_status:
@@ -88,8 +92,10 @@ def handle_message(event):
       game_1A2B_status, content= game1A2B(game_1A2B_ans, event.message.text, game_1A2B_count)
       message = TextMessage(text=content)
       line_bot_api.reply_message(event.reply_token, message)
+    
+    # 無此功能
     else:
-      message = TextMessage(text='無此功能')
+      message = TextMessage(text='目前無此功能')
       line_bot_api.reply_message(event.reply_token, message)
 
 def NBARank():
