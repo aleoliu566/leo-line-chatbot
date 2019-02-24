@@ -3,7 +3,7 @@ import os
 import urllib.request
 import json
 import random
-from datetime import date
+import datetime
 
 from linebot import (
     LineBotApi, WebhookHandler
