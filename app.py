@@ -34,15 +34,16 @@ def callback():
         abort(400)
     return 'OK'
 
+game_1A2B_status = False
+game_1A2B_ans = ''
+game_1A2B_count = 0
+
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = TextSendMessage(text=event.message.text)
     resume_url = "https://drive.google.com/file/d/1Q2ry3AevnYWmsRiO2i48203aDgdom5Ps/view?usp=sharing"
     resume_pic = "https://i.imgur.com/DQgSYuT.png"
-    1A2B_game_status = False
-    1A2B_ans = ''
-    1A2B_count
 
     if event.message.text == "履歷":
       message = TemplateSendMessage(
@@ -64,15 +65,15 @@ def handle_message(event):
       message = TextMessage(text=NBARank())
       line_bot_api.reply_message(event.reply_token, message)
     elif event.message.text == "1A2B":
-      1A2B_game_status = True
+      game_1A2B_status = True
       digit = ('0123456789')
-      1A2B_ans = ''.join(random.sample(digit, 4))
-      1A2B_count = 0
+      game_1A2B_ans = ''.join(random.sample(digit, 4))
+      game_1A2B_count = 0
     elif event.message.text == "!1A2B":
-      1A2B_game_status = False
-    elif 1A2B_game_status:
-      1A2B_count+=1
-      1A2B_game_status, content= game1A2B(message, 1A2B_ans, 1A2B_count)
+      game_1A2Bstatus = False
+    elif game_1A2B_status:
+      game_1A2B_count+=1
+      game_1A2B_status, content= game1A2B(message, 1A2B_ans, 1A2B_count)
       message = TextMessage(text=content)
       line_bot_api.reply_message(event.reply_token, message)
     else:
