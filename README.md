@@ -8,7 +8,7 @@ Leo_bot is a line chatbot implemented in python by using the [line message api](
 - 1A2B Game
 
 #### Leo_Bot QRcode
-![alt text](http://qr-official.line.me/L/8Vwu3Mo0lE.png)
+![](http://qr-official.line.me/L/8Vwu3Mo0lE.png)
 
 #### Reference
 - https://github.com/line/line-bot-sdk-python
