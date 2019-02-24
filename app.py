@@ -44,6 +44,7 @@ def handle_message(event):
     message = TextSendMessage(text=event.message.text)
     resume_url = "https://drive.google.com/file/d/1Q2ry3AevnYWmsRiO2i48203aDgdom5Ps/view?usp=sharing"
     resume_pic = "https://i.imgur.com/DQgSYuT.png"
+    global game_1A2B_status, game_1A2B_ans, game_1A2B_count
 
     if event.message.text == "履歷":
       message = TemplateSendMessage(
