@@ -74,7 +74,7 @@ def handle_message(event):
       game_1A2Bstatus = False
     elif game_1A2B_status:
       game_1A2B_count+=1
-      game_1A2B_status, content= game1A2B(message, game_1A2B_ans, game_1A2B_count)
+      game_1A2B_status, content= game1A2B(event.message.text, game_1A2B_ans, game_1A2B_count)
       message = TextMessage(text=content)
       line_bot_api.reply_message(event.reply_token, message)
     else:
