@@ -1,4 +1,5 @@
 from flask import Flask, request, abort
+import os
 import urllib.request
 import json
 import random
@@ -74,7 +75,7 @@ def handle_message(event):
       game_1A2Bstatus = False
     elif game_1A2B_status:
       game_1A2B_count+=1
-      game_1A2B_status, content= game1A2B(event.message.text, game_1A2B_ans, game_1A2B_count)
+      game_1A2B_status, content= game1A2B(game_1A2B_ans, event.message.text, game_1A2B_count)
       message = TextMessage(text=content)
       line_bot_api.reply_message(event.reply_token, message)
     else:
@@ -121,7 +122,6 @@ def game1A2B(answer, reply, count):
     elif reply == answer:
       return False, '恭喜你答對了，總共回答'+str(count)+'次'
 
-import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
